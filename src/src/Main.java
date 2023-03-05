@@ -3,12 +3,17 @@ import java.util.*;
 
 public class Main {
 	
+	Menu menu = new Menu();
+	menu.show("main");  // displays the main menu
+	menu.show("items");  // displays the items menu
+	menu.show("invalid");  // displays an error message for an invalid menu type
+
 	static ArrayList<String> menu1 =new ArrayList<String>();
 	static Scanner scan = new Scanner(System.in);
     static Stack<String> stack = new Stack<String>();
-    static Product newItem1 = new Product();
-    
-    
+    static Item newItem1 = new Item();
+
+      menu.show();
     
     static boolean program = true;
     static int first_selection;
@@ -18,29 +23,42 @@ public class Main {
     
 	public static void main(String[] args) {
 	
-		callMenu.Menu1();
+		//callMenu.Menu1();
 		
 	      while(program){
 	       System.out.println();
 	       System.out.println("select action  :");
 	       Menu firstMenu = new Menu();
-	       firstMenu.show(menu1);
+	       //firstMenu.show(menu1);
 	       first_selection=scan.nextInt();
 	       first_selection--;
+		int option;
+		switch(option) 
+		{
+		case 1 :
+			System.out.println("");
+			
+			break;
 		
 		
-	   	try {
-	       if(menu1.get(first_selection).equals("shop setting"))
+		
+		
+		
+		
+		
+		}
+	   
+	       /*if(menu1.get(first_selection).equals("shop setting"))
 	       {
 	    	   ShopeSetting detail = new ShopeSetting();
 	           detail.ShopeSetting();
-	       }
-	          else if(menu1.get(first_selection).equals("Manage Shop"))
+	       }*/
+	         /* else if(menu1.get(first_selection).equals("Manage Shop"))
 	          {
 	              ManageShop newmanage = new ManageShop();
 	              newmanage.addManage();
-	          }
-	          else if(menu1.get(first_selection).equals("Create New Invoicing"))
+	          }*/
+	          /*else if(menu1.get(first_selection).equals("Create New Invoicing"))
 	          {
 	              Create newInvoic = new Create();
 	          }
@@ -86,17 +104,18 @@ public class Main {
 	                  }
 	              }
 	          }
-	   	}
+	   	}*/
 	   	
 	   	
-             catch (Exception ex) {
+             /*catch (Exception ex) {
                  System.out.println("Wrong Number ");
           
-            }
-	      }
-	
+            }*/
+	   	}
 	}
 }
+	      
+	
 
 
 	  

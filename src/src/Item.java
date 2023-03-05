@@ -1,5 +1,5 @@
 package src;
-public class Product implements Main {
+public class Item {
      
 	int itemId;
 	String item_Name;

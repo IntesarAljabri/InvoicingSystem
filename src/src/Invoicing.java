@@ -1,9 +1,10 @@
  package src;
 
 import java.io.Serializable;
- static ArrayList invoiceList = new ArrayList();
+import java.util.ArrayList;
+
 public class Invoicing implements Serializable {
-	
+	static ArrayList<String> invoiceList =new ArrayList<String>();
 	    int invNO;
 
 	    String costumerName;
@@ -13,7 +14,5 @@ public class Invoicing implements Serializable {
 	    double totalAmount;
 	    double paidAmount;
 	    double balance ;
-
-	   ArrayList invoiceList = new ArrayList();
 
 	}
