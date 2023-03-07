@@ -6,4 +6,5 @@
  *
  */
 module InvoicingSystem {
+	requires java.sql;
 }
