@@ -5,6 +5,7 @@ import java.util.*;
 
 class Item implements Serializable {
 
+	public static final int List = 0;
 	static int itemId;
 	static String item_Name;
 	static double unitPrice;
@@ -15,7 +16,7 @@ class Item implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Item(Object item_Name2, int quantity2, Object unitPrice2, Object qtyprice2) {
+	public Item(Object item_Name2, Object unitPrice2, Object qtyprice2) {
 		// TODO Auto-generated constructor stub
 	}
 

@@ -1,8 +1,10 @@
 package src;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,13 +12,15 @@ import java.util.List;
 
 public class Invoicing implements Serializable {
 
+	private static final String Invoice = null;
+
 	// Invoicing Array
 	static ArrayList<String> invoiceList = new ArrayList<String>();
 
 	private String tel;
 	private String fax;
-	private String email;
-	private String website;
+	private static String email;
+	private static String website;
 	// private InvoiceHeader header;
 
 	public String getTel() {
@@ -37,7 +41,7 @@ public class Invoicing implements Serializable {
 
 	// data of invoice
 	static int invNO;
-	static String costumerName;
+	static String customerName;
 	static int phone;
 	static Date date;
 	static int numberOfItems;
@@ -58,11 +62,11 @@ public class Invoicing implements Serializable {
 
 	// setter and getter of invoice data
 	public void setcostumerName(String customerName) {
-		Invoicing.costumerName = customerName;
+		Invoicing.customerName = customerName;
 	}
 
 	public String getCustomerName() {
-		return costumerName;
+		return customerName;
 	}
 
 	public int getInvoicePhone() {
@@ -116,7 +120,19 @@ public class Invoicing implements Serializable {
 	}
 
 	public static void loadInvoices() {
-		// TODO Auto-generated method stub
+		try {
+			ObjectInputStream in = new ObjectInputStream(new FileInputStream(Invoice));
+			ShopeSetting settings = (ShopeSetting) in.readObject();
+			String shopName = settings.shopName;
+			String telNumber = settings.telNumber;
+			String faxNumber = settings.faxNumber;
+			email = settings.email;
+			website = settings.website;
+			in.close();
+		} catch (IOException | ClassNotFoundException e) {
+			// Ignore if file not found or if class not found
+			System.out.println("Error loading data: " + e.getMessage());
+		}
 
 	}
 
@@ -130,7 +146,7 @@ public class Invoicing implements Serializable {
 			double unitPrice = Double.parseDouble(parts[2]);
 			double qtyprice = Double.parseDouble(parts[3]);
 
-			return new Item(item_Name, quantity, unitPrice, qtyprice);
+			return new Item(item_Name, quantity);
 		}
 
 		public static List<Item> readItemsFromFile(String Invoice) throws IOException {

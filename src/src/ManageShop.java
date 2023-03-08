@@ -3,42 +3,61 @@ package src;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 class ShopManage implements Serializable {
 	private ArrayList<Item> items;
 	private String saveItem = "items.ser";
-
+    static Scanner scan= new Scanner(System.in);
 	ShopManage() {
 		/**/
 	}
 
 	public void save() {
 		try {
-			File file = new File(saveItem);
-			if (file.exists()) {
-				FileInputStream fileOut = new FileInputStream(saveItem);
-				ObjectInputStream Out = new ObjectInputStream(fileOut);
-				ArrayList<Item> readObject = (ArrayList<Item>) Out.readObject();
+			File file = new File("Invoice.txt");
+
+			if (file.createNewFile()) {
+				System.out.println("File is Created");
+				System.out.println("File name : " + file.getName());
+
+				FileWriter File = new FileWriter("Invoice.txt");
+				ArrayList<Item> readObject = (ArrayList<Item>) ((ObjectInput) File).readObject();
+				
+				File.write("|-----------------------------------------------------------|");
+				File.write("|                    INVOICE DETAILS                        |");
+				File.write("|-----------------------------------------------------------|");
+				File.write("|Item ID :                  " + Item.itemId + "             |");
+				File.write("|Item name :                " + Item.item_Name + "          |");
+				File.write("|Item unitPrice :           " + Item.unitPrice + "          |");
+				File.write("|Item quantity :            " + Item.quantity + "           |");
+				File.write("|Invoice ID :               " + Invoicing.invNO + "         |");
+				File.write("|Invoice customerName :     " + Invoicing.customerName + "  |");
+				File.write("|Invoice phone :            " + Invoicing.phone + "         |");
+				File.write("|Invoice date :             " + Invoicing.date + "          |");
+				File.write("|Invoice numberOfItems :    " + Invoicing.numberOfItems + " |");
+				File.write("|Invoice totalAmount :      " + Invoicing.totalAmount + "   |");
+				File.write("|Invoice paidAmount :       " + Invoicing.paidAmount + "    |");
+				File.write("-------------------------------------------------------------");
 				items = readObject;
-				Out.close();
-				fileOut.close();
-			} else {
-				items = new ArrayList<Item>();
+				File.close();
+				File.close();
 			}
-		} catch (IOException i) {
-			i.printStackTrace();
-		} catch (ClassNotFoundException c) {
-			c.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Invalied Input");
+
 		}
 	}
 
-	public void addItem(String name, double price) {
-		items.add(new Item(name, price));
+	public void addItem(String name, double price , double unitPrice) {
+		items.add(new Item(name, price, unitPrice));
 		saveItems();
 		System.out.println("Item added successfully.");
 	}
@@ -85,10 +104,6 @@ class ShopManage implements Serializable {
 		}
 	}
 
-	public void LoadShopData() {
-		// TODO Auto-generated method stub
-
-	}
 
 	public void setShopName(String name) {
 		// TODO Auto-generated method stub
