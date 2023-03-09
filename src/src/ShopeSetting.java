@@ -12,7 +12,9 @@ public class ShopeSetting {
 	String faxNumber;
 	String email;
 	String website;
-
+		
+		
+		
 	private final static String Invoice = "Invoice.txt";
 	static Scanner scan = new Scanner(System.in);
 	// Load items and invoices from files
@@ -20,12 +22,13 @@ public class ShopeSetting {
 	String name;
 	double quantity;
 	double price;
-	ArrayList<Item> item;
+	//ArrayList<Item> item;
 
 	// To save Serialized the shop data
-	private static void saveSettings() {
+	static void saveSettings() {
 		try {
-			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(Invoice));
+			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("Invoice.txt"));
+			
 			out.writeObject(out);
 			out.close();
 		} catch (IOException e) {

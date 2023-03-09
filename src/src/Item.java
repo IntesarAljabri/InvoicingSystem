@@ -5,20 +5,16 @@ import java.util.*;
 
 class Item implements Serializable {
 
+	static Scanner scan = new Scanner(System.in);
 	public static final int List = 0;
+	private static final ShopManage manage = null;
 	static int itemId;
 	static String item_Name;
 	static double unitPrice;
 	static double quantity;
-	double qtyprice;
-
-	public Item(String name, double unitPrice) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public Item(Object item_Name2, Object unitPrice2, Object qtyprice2) {
-		// TODO Auto-generated constructor stub
-	}
+	static double qtyprice;
+	public static Object numberOfItems;
+	private static Item[] items;
 
 	// setter and getter
 	public int getitemId() {
@@ -66,4 +62,43 @@ class Item implements Serializable {
 
 	}
 
+	static Item GetReport() {
+		System.out.println("Shop Inventory Report");
+		System.out.println("---------------------");
+
+		Item newItem = new Item();
+		for (Item item : items) {
+			System.out.println("|-------------------------------------|");
+			System.out.println("|         ITEM REPORT                 |");
+			System.out.println("|-------------------------------------|");
+			System.out.println("|item_Name:" + item.getName() + "  |");
+			System.out.println("|Unit Price:" + item.getunitPrice() + "  |");
+			System.out.println("|Quantity:" + item.getquantity() + "   |");
+			System.out.println("|Quantity Price:" + item.getqtyprice() + "|");
+			System.out.println("|-------------------------------------|");
+
+		}
+		ShopManage.save();
+		return newItem;
+	}
+	static Item Change() {
+		
+		System.out.println("Enter product of item to change price:");
+		double product = scan.nextInt();
+		System.out.println("Enter new price:");
+		double newPrice = scan.nextDouble();
+		manage.changeItemPrice(product, newPrice);
+		manage.save();
+		return Change();
+	}
+	static Item deleteItem()
+	{
+		System.out.println("Enter product of item to delete:");
+		int product = scan.nextInt();
+		manage.deleteItem(product);
+		manage.save();
+		return deleteItem();
+		
+		
+	}
 }

@@ -7,8 +7,7 @@ import java.util.*;
 
 public class Main {
 
-	private static final String Invoice = null;
-	private static final String Itme = null;
+
 	static Stack<String> stack = new Stack<String>();
 	private static Object Invoic;
 	static String op;
@@ -16,6 +15,7 @@ public class Main {
 	static Scanner scan = new Scanner(System.in);
 	static ShopManage manage = new ShopManage();
 	private static Invoicing[] invoice;
+	Shop newShop = new Shop();
 
 	public static void main(String[] args) {
 		Invoicing newInvoic = new Invoicing();
@@ -58,7 +58,7 @@ public class Main {
 					System.out.println("|[3]. Set Invoice(Tel"+"Fax/Email/Website|");
 					System.out.println("|[4]. Go Back \n                         |");
 					System.out.println("|----------------------------------------|");
-					System.out.println("   Choose an Option :                     ");
+					System.out.println("            Choose an Option :            ");
 					System.out.println("|----------------------------------------|");
 					String op1 = scan.next();
 
@@ -66,37 +66,23 @@ public class Main {
 					switch (op1) {
 					case "1":
 						// Load data
-						loadData();
+						Shop.itemList.add(loadData());
+                       
 						break;
 					case "2":
 						// Set shop name
 						System.out.println("Enter shop name:");
 						String shopName = scan.next();
-						saveSettings();
 						System.out.println("Shop name set to: " + shopName);
-
+						ShopManage.save();
 						// repeat1=false;
 						break;
 
 					case "3":
 						// Set invoice header
-						System.out.println("Enter tel number:");
-						int telNumber = scan.nextInt();
-						System.out.println("Enter fax number:");
-						int faxNumber = scan.nextInt();
-						System.out.println("Enter email:");
-						String email = scan.next();
-						System.out.println("Enter website:");
-						String website = scan.next();
-						saveSettings();
-						System.out.println("|---------------------------------|");
-						System.out.println("|Invoice header set to:           |");
-						System.out.println("|Tel:                             |" + telNumber);
-						System.out.println("|Fax:                             |" + faxNumber);
-						System.out.println("|Email:                           |" + email);
-						System.out.println("|Website:                         |" + website);
-						System.out.println("|---------------------------------|");
+						Invoicing.SetHeader();
 						break;
+						
 					case "4":
 						// Go back
 						setupWhile = false;
@@ -107,6 +93,7 @@ public class Main {
 					}
 				}
 				break;
+				
 			case "2":
 				// Manage Shop sub menu
 				// String choice2 = scan.next();
@@ -131,48 +118,24 @@ public class Main {
 						String name = scan.next();
 						System.out.println("Enter price of item:");
 						double price = scan.nextDouble();
-						double unitPrice = 0;
+						double unitPrice = 0.0;
 						manage.addItem(name, price,unitPrice);
 						manage.save();
 						break;
 
 					case "2":
 						// Delete Item
-						System.out.println("Enter product of item to delete:");
-						int product = scan.nextInt();
-						manage.deleteItem(product);
-						manage.save();
+						 Item.deleteItem();
 						break;
 
 					case "3":
 						// Change Item price
-						System.out.println("Enter product of item to change price:");
-						product = scan.nextInt();
-						System.out.println("Enter new price:");
-						double newPrice = scan.nextDouble();
-						manage.changeItemPrice(product, newPrice);
-						manage.save();
+						Item.Change();
 						break;
 
 					case "4":
 						// Report All Items
-						System.out.println("Shop Inventory Report");
-						System.out.println("---------------------");
-
-						Item[] items = null;
-						for (Item item : items) {
-							System.out.println("|--------------------------|");
-							System.out.println("|         ITEM REPORT      |");
-							System.out.println("|--------------------------|");
-							System.out.println("|item_Name:                |" + item.getName());
-							System.out.println("|Unit Price:               |" + item.getunitPrice());
-							System.out.println("|Quantity:                 |" + item.getquantity());
-							System.out.println("|Quantity Price:           |" + item.getqtyprice());
-							System.out.println("|--------------------------|");
-
-						}
-						manage.save();
-
+						Item.GetReport();
 						break;
 
 					case "5":
@@ -181,25 +144,11 @@ public class Main {
 						break;
 					}
 				}
+	
 				break;
 			case "3":
 				// Create New Invoicing
-				Invoicing.loadInvoices();
-				List<Item> items = getAvailableItems(); // get list of available items from some method
-				while (true) {
-					System.out.println("Select an item to add (enter product or -1 to finish):");
-					for (int i = 0; i < items.size(); i++) {
-						System.out.println(i + ". " + items.get(i).getName() + " - " + items.get(i).getunitPrice());
-					}
-					int product = scan.nextInt();
-					if (product == -1) {
-						break;
-					} else if (product >= 0 && product < items.size()) {
-						Invoicing.addItem(items.get(product));
-					} else {
-						System.out.println("Invalid product.");
-					}
-				}
+				Item.GetReport();
 
 				// calculate total price and add invoice to manager
 				Invoicing.calculateTotalPrice();
@@ -208,104 +157,21 @@ public class Main {
 
 			case "4":
 				// Report Statistic
-				ArrayList<String> invoiceList = new ArrayList<String>();
-				// Invoicing.add(new Invoicing(1, 25.77));
-				// Invoicing.add(new Invoicing(2, 50.25));
-				// Invoicing.add(new Invoicing(3, 75.00));
-				// Invoicing.add(new Invoicing(4, 200.00));
-
-				// Calculate statistics
-				int numItems = 0;
-				int numInvoices = Invoicing.size();
-				double totalSales = 0.0;
-				for (Invoicing invoice : invoice) {
-					numItems += invoice.getNumberOfItems();
-					totalSales += invoice.getTotal();
-				}
-
-				// Print results
-				System.out.println("|----------------------------------|");
-				System.out.println("|          INVOICE REPORT          |");
-				System.out.println("|----------------------------------|");
-				System.out.println("|Number of items sold :            |" + numItems);
-				System.out.println("|Number of invoices:               |" + numInvoices);
-				System.out.println("|Total sales: $                    |" + totalSales);
-				System.out.println("|----------------------------------|");
+				Main.ReportStatistic();
 				break;
 
 			case "5":
 				// Report
-				for (int i = 0; i < Invoicing.invoiceList.size(); i++) {
-					System.out.println("|---------------------------------|");
-					System.out.println("|        FULL REPORT              |");
-					System.out.println("|---------------------------------|");
-					System.out.println("|Invoice NO.:                     |" + Invoicing.invNO);
-					System.out.println("|Invoice Date :                   |"+ Invoicing.date);
-					System.out.println("|Customer Name:                   |" + Invoicing.customerName);
-					System.out.println("|Customer Phone:                  |" + Invoicing.phone);
-					System.out.println("|Number of Item                   |" + Invoicing.numberOfItems);
-					System.out.println("|Balance:                         |" + Invoicing.balance);
-					System.out.println("|---------------------------------|");
-				}
+				Main.Report();
 				break;
 			case "6":
 				// search Invoice By ID
-				System.out.println("Enter Invoice NUMBER to search");
-				int invoNO = scan.nextInt();
-				// All data come from invoicing class
-				if (invoNO == Invoicing.invNO) {
-					
-					System.out.println("|-----------------------------------------|");
-					System.out.println("|INVOICE DETAILES NO:"+ Invoicing.invNO+ "|");
-					System.out.println("|-----------------------------------------|");
-					System.out.println("|Invoice NO.:                             |" + Invoicing.invNO);
-					System.out.println("|Customer Name:                           |" + Invoicing.customerName);
-					System.out.println("|Customer Pone:                           |" + Invoicing.phone);
-					System.out.println("|Invoice Date:                            |" + Invoicing.date);
-					System.out.println("|Balance:                                 |" + Invoicing.balance);
-					System.out.println("------------------------------------------|");
-					// System.out.println("Item Name: " + Invoicing.item_Nameme);
-					// System.out.println("Item ID: " + Invoicing.itemId);
-					// System.out.println("Item Price: " + Invoicing.unitPrice);
-					// System.out.println("Item Quantity: " + Invoicing.quantity);
-					// System.out.println("Item Quantity Amount: " + Invoicing.qtyAmount);
-				}
-
+				Invoicing.Search();
 				break;
 
 			case "7":
 				// Program Statistic
-
-				int selection1 = 0;
-				int selection2 = 0;
-				int selection3 = 0;
-				int selection4 = 0;
-				int selection5 = 0;
-				int selection6 = 0;
-
-				for (int i = 0; i < Main.stack.size(); i++) {
-					if (Main.stack.get(i).equals("1")) {
-						selection1++;
-					} else if (Main.stack.get(i).equals("2")) {
-						selection2++;
-					} else if (Main.stack.get(i).equals("3")) {
-						selection3++;
-					} else if (Main.stack.get(i).equals("4")) {
-						selection4++;
-					} else if (Main.stack.get(i).equals("5")) {
-						selection5++;
-					} else if (Main.stack.get(i).equals("5")) {
-						selection6++;
-					}
-				}
-				System.out.println("----------------------------------");
-				System.out.println("|Shop Setting =                   |" + selection1);
-				System.out.println("|Manage Shop        =             |" + selection2);
-				System.out.println("|Create New Invoice =             |" + selection3);
-				System.out.println("|Report Statistic   =             |" + selection4);
-				System.out.println("|Report           =               |" + selection5);
-				System.out.println("|Search By ID     =               |" + selection6);
-				System.out.println("----------------------------------");
+				Main.ProgStatistic();
 				break;
 
 			case "8":
@@ -318,30 +184,35 @@ public class Main {
 				}
 			}
 		}
+
 	}
 
+	
+	
+	
+	//Save Shop Setting
 	private static void saveSettings() {
 
 		try {
-			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(Invoice));
+			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("Invoice.txt"));
 			out.writeObject(out);
 			out.close();
 		} catch (IOException e) {
 			System.out.println("Error saving data: " + e.getMessage());
 		}
 	}
-
-	private static List<Item> getAvailableItems() {
-		if(Item.List == 1 )
-			return extracted();
+     //Check invoice then create new
+	private static int getAvailableItems() {
+		if(Shop.itemList.size() == 1 )
+			return Shop.itemList.size();
 		else {
-		System.out.println("Enter items ID :" + Item.itemId);
+		System.out.println("Enter items ID :" );
 		int id = scan.nextInt();
-		System.out.println("Enter items name :" + Item.item_Name);
-		String name = scan.nextLine();
-		System.out.println("Enter items Quantity :" + Item.quantity);
+		System.out.println("Enter items name :");
+		String name = scan.next();
+		System.out.println("Enter items Quantity :");
 		double quantity = scan.nextDouble();
-		System.out.println("Enter item Price : " + Item.unitPrice);
+		System.out.println("Enter item Price : " );
 		double price = scan.nextDouble();
 		// ArrayList<String> invoiceList = loadInvoicing(Invoice);
 
@@ -349,33 +220,116 @@ public class Main {
 		System.out.println("Data loaded successfully.");
 		//return item;
 	}
-		List<Item> item = null;
-		return item;
+		return getAvailableItems();
+		
 }
-	// implementation details not provided in the requirements
 
-	private static List<Item> extracted() {
-		List<Item> item = null;
-		return item;
-	}
+	
 
-	private static  ArrayList<Item> loadData() {
-		System.out.println("Enter items ID :" + Item.itemId);
+	
+   //Load data for Shop Setting
+	private static Item loadData() {
+		Item newItem = new Item();
+		
+		System.out.println("Enter items ID :");
 		int id = scan.nextInt();
-		System.out.println("Enter items name :" + Item.item_Name);
+		System.out.println("Enter items name :" );
 		String name = scan.nextLine();
-		System.out.println("Enter items Quantity :" + Item.quantity);
+		System.out.println("Enter items Quantity :" );
 		double quantity = scan.nextDouble();
-		System.out.println("Enter item Price : " + Item.unitPrice);
+		System.out.println("Enter item Price : ");
 		double price = scan.nextDouble();
-		// ArrayList<String> invoiceList = loadInvoicing(Invoice);
-
+		
+		
+		newItem.setitemId(id);
+		newItem.setName(name);
+		newItem.setqtyprice(price);
+		newItem.setquantity(quantity);
+		ShopeSetting.saveSettings();
 		// Do something with the loaded items and invoices.
 		System.out.println("Data loaded successfully.");
-		//return item;
-		return null;
+		return newItem;
 	}
+	
+	
+    //Case 4 Report Statistic
+	static Item ReportStatistic() {
+		
+		int numItems = 0;
+		int numInvoices = Invoicing.size();
+		double totalSales = 0.0;
+		for (Invoicing invoice : invoice) {
+			numItems += invoice.getNumberOfItems();
+			totalSales += invoice.getTotal();
+		}
 
+		// Print results
+		System.out.println("|----------------------------------|");
+		System.out.println("|          INVOICE REPORT          |");
+		System.out.println("|----------------------------------|");
+		System.out.println("|Number of items sold :            |" + Item.numberOfItems);
+		System.out.println("|Number of invoices:               |" + Shop.invoiceList.size());
+		System.out.println("|Total sales: $                    |" + totalSales);
+		System.out.println("|----------------------------------|");
+		return ReportStatistic();
+		
+	}
+	
+	//Report case5
+	static Main Report() {
+		
+		
+		for (int i = 0; i < Shop.invoiceList.size(); i++) {
+			System.out.println("|---------------------------------|");
+			System.out.println("|        FULL REPORT              |");
+			System.out.println("|---------------------------------|");
+			System.out.println("|Invoice NO.:                     |" + Invoicing.invNO);
+			System.out.println("|Invoice Date :                   |"+ Invoicing.date);
+			System.out.println("|Customer Name:                   |" + Invoicing.customerName);
+			System.out.println("|Customer Phone:                  |" + Invoicing.phone);
+			System.out.println("|Number of Item                   |" + Invoicing.numberOfItems);
+			System.out.println("|Balance:                         |" + Invoicing.balance);
+			System.out.println("|---------------------------------|");
+		}
+		return Report() ;
+	}
+	
+	
+	//case 7 Program statistic
+	static Main ProgStatistic() {
+		
+		int selection1 = 0;
+		int selection2 = 0;
+		int selection3 = 0;
+		int selection4 = 0;
+		int selection5 = 0;
+		int selection6 = 0;
+
+		for (int i = 0; i < Main.stack.size(); i++) {
+			if (Main.stack.get(i).equals("1")) {
+				selection1++;
+			} else if (Main.stack.get(i).equals("2")) {
+				selection2++;
+			} else if (Main.stack.get(i).equals("3")) {
+				selection3++;
+			} else if (Main.stack.get(i).equals("4")) {
+				selection4++;
+			} else if (Main.stack.get(i).equals("5")) {
+				selection5++;
+			} else if (Main.stack.get(i).equals("5")) {
+				selection6++;
+			}
+		}
+		System.out.println("----------------------------------");
+		System.out.println("|Shop Setting =                   |" + selection1);
+		System.out.println("|Manage Shop        =             |" + selection2);
+		System.out.println("|Create New Invoice =             |" + selection3);
+		System.out.println("|Report Statistic   =             |" + selection4);
+		System.out.println("|Report           =               |" + selection5);
+		System.out.println("|Search By ID     =               |" + selection6);
+		System.out.println("----------------------------------");
+		return ProgStatistic();
+	}
 }
 
 /*
