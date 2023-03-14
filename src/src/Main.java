@@ -11,7 +11,7 @@ public class Main {
 		   static ArrayList<Item> itemList= new ArrayList<Item>();
 				
 		 // Invoicing Array
-		  static ArrayList<String> invoiceList = new ArrayList<String>();
+		  static ArrayList<Invoicing> invoiceList = new ArrayList<Invoicing>();
 				
 			
 
@@ -178,12 +178,11 @@ public class Main {
 
 				// calculate total price and add invoice to manager
 				Invoicing.calculateTotalPrice();
-				ShopManage.addInvoice(Invoic);
 				break;
 
 			case "4":
 				// Report Statistic
-				ReportStatistic();
+				Reportstatics();
 				break;
 
 			case "5":
@@ -217,10 +216,25 @@ public class Main {
 	
 	
     //Case 4 Report Statistic
-	static Item ReportStatistic() {
-		
-		int numItems = 0;
-		int numInvoices = Invoicing.size();
+	public static void Reportstatics() {
+	    int numItems = 0;
+	    int numInvoices = Invoicing.invoiceList.size();
+	    double totalSales = 0.0;
+	    
+	    for (Invoicing invoice : Shop.invoiceList) {
+	        numItems += Invoicing.getNumberOfItems();
+	        totalSales += Invoicing.getTotal();
+	    }
+
+	    System.out.println("|---------------------------------------------------------------|");
+	    System.out.println("|             INVOICE REPORT                                    |");
+	    System.out.println("|---------------------------------------------------------------|");
+	    System.out.println("| Number of items sold: " + numItems + "                        |");
+	    System.out.println("| Number of invoices: " + numInvoices + "                       |");
+	    System.out.println("| Total sales: $" + String.format("%.2f", totalSales) + "       |");
+	    System.out.println("|---------------------------------------------------------------|");
+	}
+		/*int numItems = 0;
 		double totalSales = 0.0;
 		for (Invoicing invoice : invoice) {
 			numItems += invoice.getNumberOfItems();
@@ -237,7 +251,7 @@ public class Main {
 		System.out.println("|------------------------------------------------|");
 		return ReportStatistic();
 		
-	}
+	}*/
 	
 	//Report case5
 	static void InvoiceReporter(){
@@ -264,7 +278,7 @@ public class Main {
 	
 	
 	//case 7 Program statistic
-	static Main ProgStatistic() {
+	static void ProgStatistic() {
 		
 		int selection1 = 0;
 		int selection2 = 0;
@@ -298,7 +312,8 @@ public class Main {
 		System.out.println("|Report         = " + selection5+"     |");
 		System.out.println("|Search By ID     =" + selection6+"    |");
 		System.out.println("|--------------------------------------|");
-		return ProgStatistic();
+		
+		
 	}
 }
 

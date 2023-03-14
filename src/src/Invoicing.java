@@ -50,7 +50,7 @@ public class Invoicing implements Serializable {
 	static int invNO;
 	static String customerName;
 	static int phone;
-	static Date date;
+	static String date;
 	static int numberOfItems;
 	static double totalAmount;
 	static double paidAmount;
@@ -76,15 +76,15 @@ public class Invoicing implements Serializable {
 		Invoicing.phone = invoiceNumber;
 	}
 
-	public Date getInvoiceDate() {
+	public String getInvoiceDate() {
 		return date;
 	}
 
-	public void setInvoiceDate(Date invoiceDate) {
+	public void setInvoiceDate(String invoiceDate) {
 		Invoicing.date = invoiceDate;
 	}
 
-	public int getNumberOfItems() {
+	public static int getNumberOfItems() {
 		return numberOfItems;
 	}
 
@@ -92,7 +92,7 @@ public class Invoicing implements Serializable {
 		Invoicing.numberOfItems = numberOfItems;
 	}
 
-	public double getTotal() {
+	public static double getTotal() {
 		return totalAmount;
 	}
 
@@ -230,38 +230,68 @@ public class Invoicing implements Serializable {
 	}
 	    
 	    
-	  //Check invoice then create new
-	    //static Invoicing getAvailableItems() {
+	    
+	        //create new Invoice
 	    	public static void newInvoice() {
-	    		System.out.println("Invoice Number: " + invNO);
-	    		System.out.println("Customer Name: " + customerName);
-	    		System.out.println("Phone: " + phone);
-	    		System.out.println("Date: " + date);
-	    		System.out.println("Items: ");
-	    		for (int i = 0; i < Shop.itemList.size(); i++) {
-	    			System.out.println(Shop.itemList.get(i).getName() + " - " + Shop.itemList.get(i).getquantity() + " x " + Shop.itemList.get(i).getqtyprice());
+	    		System.out.println("Invoice Number: ");
+	    		int invNO = scan.nextInt();
+	    		System.out.println("Customer Name: " );
+	    		String customerName= scan.next();
+	    		System.out.println("Phone: " );
+	    		int phone=scan.nextInt();
+	    		System.out.println("Date: ");
+	    		int date= scan.nextInt();
+	    		System.out.println("Items name: ");
+	    		String name = scan.next();
+	    		System.out.println("Balance: $");
+	    		int balance =scan.nextInt();
+	    		
+	    		
+	    		try {
+	    			File file = new File("Invoice.txt");
+
+	    			if (file.createNewFile()) {
+	    				System.out.println("File is Created");
+	    				System.out.println("File name : " + file.getName());
+
+	    				FileWriter File = new FileWriter("Item.txt");
+	    				java.io.File readObject = (java.io.File) ((ObjectInput) File).readObject();
+	    				File.write("|-----------------------------------------------------------|");
+	    				File.write("|                     INVOICE DETAILS                       |");
+	    				File.write("|-----------------------------------------------------------|");
+	    				File.write("|Invoice ID :               " + Invoicing.invNO + "         |");
+	    				File.write("|Invoice customerName :     " + Invoicing.customerName + "  |");
+	    				File.write("|Invoice phone :            " + Invoicing.phone + "         |");
+	    				File.write("|Invoice date :             " + Invoicing.date + "          |");
+	    				File.write("|Item name             :    " + Item.item_Name + "          |");
+	    				File.write("|Invoice balance  :      " + Invoicing.balance + "          |");
+	    				File.write("|-----------------------------------------------------------|");
+	    			}
+	    		} 
+	    		
+	    		catch (Exception e) {
+	    		System.out.println("Invalied Input");
+
 	    		}
-	    		System.out.println("Balance: $" + balance);
 	    	}
 	    	
-		 
-
-	    
+	    	
+	    	//Search invoice by id
 			static Invoicing Search() {
 				System.out.println("Enter Invoice NUMBER to search");
 				int invoNO = scan.nextInt();
 				// All data come from invoicing class
 				if (invoNO == Invoicing.invNO) {
 
-					System.out.println("|--------------------------------------------|");
+					System.out.println("|----------------------------------------------|");
 					System.out.println("|INVOICE DETAILES NO:" + Invoicing.invNO + "   |");
-					System.out.println("|--------------------------------------------|");
+					System.out.println("|----------------------------------------------|");
 					System.out.println("|Invoice NO.:" + Invoicing.invNO + "           |");
 					System.out.println("|Customer Name:" + Invoicing.customerName + "  |");
 					System.out.println("|Customer Pone:" + Invoicing.phone + "         |");
 					System.out.println("|Invoice Date:" + Invoicing.date + "           |");
-					System.out.println("|Balance:" + Invoicing.balance + "              |");
-					System.out.println("---------------------------------------------|");
+					System.out.println("|Balance:" + Invoicing.balance + "             |");
+					System.out.println("-----------------------------------------------|");
 					// System.out.println("Item Name: " + Invoicing.item_Nameme);
 					// System.out.println("Item ID: " + Invoicing.itemId);
 					// System.out.println("Item Price: " + Invoicing.unitPrice);
@@ -276,15 +306,6 @@ public class Invoicing implements Serializable {
 				return null;
 			}
 	  	  
-	public static int size() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public static void add(Object invoic) {
-		Invoicing.add(invoic);
-	}
-
 	private static void addInvoice(Object invoic) {
 		Invoicing.addInvoice(invoic);		
 		

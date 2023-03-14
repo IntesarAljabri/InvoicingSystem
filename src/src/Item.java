@@ -90,18 +90,21 @@ class Item implements Serializable {
 		System.out.println("Enter new price:");
 		double newPrice = scan.nextDouble();
 		manage.changeItemPrice(item, newPrice);
-		while (true) {
-			System.out.print("Do you want to add item to Change price ? (y/n):    ");
-			String select = scan.next();
-			if (select.equals("N") || select.equals("n")) {
-				repeat = false;
-				break;
-			} else if (select.equals("y") || select.equals("Y")) {
-				break;
-			} else {
-				System.out.println("Invalid letter  ");
-			}
+		
+		
+			while(repeat) {
+				System.out.print("Do you want to delete other item ? (y/n):    ");
+				String select = scan.next();
+				if (select.equals("N") || select.equals("n")) {
+					repeat = false;
+					break;
+				} else if (select.equals("y") || select.equals("Y")) {
+					break;
+				} else {
+					System.out.println("Invalid letter  ");
+				}
 		}
+		
 		ShopManage.save();
 		return Change();
 		
@@ -110,8 +113,9 @@ class Item implements Serializable {
 	
 	static Item deleteItem() {
 	boolean run=true;
-	{
-		System.out.println("Enter id of item to delete :" + Item.itemId);
+	
+	
+		System.out.println("Enter id of item to delete :" );
 		int item = scan.nextInt();
 		if(Item.itemId == item) {
 			
@@ -122,7 +126,7 @@ class Item implements Serializable {
 			System.out.println("Not Found");
 		}
 
-		while(true) {
+		while(run) {
 			System.out.print("Do you want to delete other item ? (y/n):    ");
 			String select = scan.next();
 			if (select.equals("N") || select.equals("n")) {
@@ -134,10 +138,11 @@ class Item implements Serializable {
 				System.out.println("Invalid letter  ");
 			}
 		}
+	
 		//Item.deleteItem();
 		ShopManage.save();
 		return deleteItem();
 		
 	   }
 	}
-}
+

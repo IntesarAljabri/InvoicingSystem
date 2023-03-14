@@ -65,6 +65,7 @@ public class ShopeSetting {
 		        }
 		        System.out.print("Enter item Quantity: ");
 		        double quantity = scan.nextDouble();
+		        
 		        try {
 		            FileWriter writer = new FileWriter("items.txt", true);
 		            writer.write(itemId + " - " + name + " - $" + price +  " _ " + quantity +"\n");

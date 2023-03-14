@@ -119,9 +119,6 @@ class ShopManage implements Serializable {
 	
 
 
-	public static void addInvoice(Object invoic) {
-		Invoicing.add(invoic);
 
-	}
 }
 	

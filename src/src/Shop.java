@@ -9,7 +9,7 @@ public class Shop {
 			static ArrayList<Item> itemList= new ArrayList<Item>();
 			
 			// Invoicing Array
-			static ArrayList<String> invoiceList = new ArrayList<String>();
+			static ArrayList<Invoicing> invoiceList = new ArrayList<Invoicing>();
 			
 		
 }
