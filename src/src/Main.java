@@ -1,12 +1,19 @@
 package src;
 
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.*;
 
 public class Main {
+	      private static final double quantity = 0;
 
+		// Array of items
+		   static ArrayList<Item> itemList= new ArrayList<Item>();
+				
+		 // Invoicing Array
+		  static ArrayList<String> invoiceList = new ArrayList<String>();
+				
+			
 
 	static Stack<String> stack = new Stack<String>();
 	private static Object Invoic;
@@ -17,7 +24,7 @@ public class Main {
 	private static Invoicing[] invoice;
 	Shop newShop = new Shop();
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException {
 		Invoicing newInvoic = new Invoicing();
 
 		
@@ -39,14 +46,13 @@ public class Main {
 			System.out.println("|[7]. Program Statistic          |");
 			System.out.println("|[8]. Exit\n                     |");
 			System.out.println("|--------------------------------|");
-			System.out.println("   Choose an Option :            ");
+			System.out.println("   Choose an Option :             ");
 			System.out.println("|--------------------------------|");
 			String op = scan.next();
-
+           stack.push(op);
 			switch (op) {
 
 			case "1":
-				// manager.printShopSettings();
 				// Sub menu of shop setting
 				boolean setupWhile = true;
 				while (setupWhile) {
@@ -55,32 +61,34 @@ public class Main {
 					System.out.println("|----------------------------------------|");
 					System.out.println("|[1]. Load Data (Items and invoices)     |");
 					System.out.println("|[2]. Set Shop Name                      |");
-					System.out.println("|[3]. Set Invoice(Tel"+"Fax/Email/Website|");
+					System.out.println("|[3]. Set Invoice(Tel/Fax/Email/Website  |");
 					System.out.println("|[4]. Go Back \n                         |");
 					System.out.println("|----------------------------------------|");
 					System.out.println("            Choose an Option :            ");
 					System.out.println("|----------------------------------------|");
 					String op1 = scan.next();
+					
 
 					// String choice1= scan.next();
 					switch (op1) {
 					case "1":
 						// Load data
-						Shop.itemList.add(loadData());
-                       
+						ShopeSetting.loadData(1);
+                       ShopeSetting.saveSettings();
 						break;
 					case "2":
 						// Set shop name
 						System.out.println("Enter shop name:");
 						String shopName = scan.next();
 						System.out.println("Shop name set to: " + shopName);
-						ShopManage.save();
+						ShopeSetting.saveSettings();
 						// repeat1=false;
 						break;
 
 					case "3":
 						// Set invoice header
 						Invoicing.SetHeader();
+						//Invoicing.saveInvoice();
 						break;
 						
 					case "4":
@@ -89,40 +97,57 @@ public class Main {
 						break;
 
 					default:
-						System.out.println("Invalid choice. Please try again.");
+						System.out.println("Invalid Option . Please try again.");
 					}
 				}
 				break;
 				
 			case "2":
-				// Manage Shop sub menu
-				// String choice2 = scan.next();
-				System.out.println("|---------------------------------|");
-				System.out.println("|         Manage Shop :           |");
-				System.out.println("|---------------------------------|");
-				System.out.println("|[1]. addItem                     |");
-				System.out.println("|[2]. deleteItem                  |");
-				System.out.println("|[3]. changeItemPrice             |");
-				System.out.println("|[4]. reportAllItems              |");
-				System.out.println("|[5]. Go Back \n                  |");
-				System.out.println("|---------------------------------|");
-				System.out.println("    Choose an option :             ");
-				System.out.println("|---------------------------------|");
-				String op2 = scan.next();
-
 				while (repeat) {
+					// Manage Shop sub menu
+					System.out.println("|---------------------------------|");
+					System.out.println("|         Manage Shop :           |");
+					System.out.println("|---------------------------------|");
+					System.out.println("|[1]. addItem                     |");
+					System.out.println("|[2]. deleteItem                  |");
+					System.out.println("|[3]. changeItemPrice             |");
+					System.out.println("|[4]. reportAllItems              |");
+					System.out.println("|[5]. Go Back \n                  |");
+					System.out.println("|---------------------------------|");
+					System.out.println("    Choose an option :             ");
+					System.out.println("|---------------------------------|");
+					String op2 = scan.next();
 					switch (op2) {
 					case "1":
 						// Add Item
-						System.out.println("Enter name of item:");
-						String name = scan.next();
-						System.out.println("Enter price of item:");
-						double price = scan.nextDouble();
-						double unitPrice = 0.0;
-						manage.addItem(name, price,unitPrice);
-						manage.save();
-						break;
+						while(program) {
+							Item newitem = new Item();
+							System.out.println("Enter name of item:");
+							String name = scan.next();
+							System.out.println("Enter price of item:");
+							double price = scan.nextDouble();
+							double unitPrice = 0;
+							newitem.setName(name);
+							newitem.setunitPrice(unitPrice);
 
+							while (true) {
+								System.out.print("Do you want to add Item ? (y/n):    ");
+								String select = scan.next();
+								if (select.equals("N") || select.equals("n")) {
+									program = false;
+									break;
+								} else if (select.equals("y") || select.equals("Y")) {
+									break;
+								} else {
+									System.out.println("Invalid Input ");
+								}
+							}
+
+							ShopManage.addItem(name, price);
+							ShopManage.save();
+						}
+						break;
+						
 					case "2":
 						// Delete Item
 						 Item.deleteItem();
@@ -142,27 +167,28 @@ public class Main {
 						// Go Back
 						repeat = false;
 						break;
+						
 					}
 				}
-	
+		
 				break;
 			case "3":
 				// Create New Invoicing
-				Item.GetReport();
+				Invoicing.newInvoice();
 
 				// calculate total price and add invoice to manager
 				Invoicing.calculateTotalPrice();
-				manage.addInvoice(Invoic);
+				ShopManage.addInvoice(Invoic);
 				break;
 
 			case "4":
 				// Report Statistic
-				Main.ReportStatistic();
+				ReportStatistic();
 				break;
 
 			case "5":
 				// Report
-				Main.Report();
+				InvoiceReporter();
 				break;
 			case "6":
 				// search Invoice By ID
@@ -190,68 +216,6 @@ public class Main {
 	
 	
 	
-	//Save Shop Setting
-	private static void saveSettings() {
-
-		try {
-			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("Invoice.txt"));
-			out.writeObject(out);
-			out.close();
-		} catch (IOException e) {
-			System.out.println("Error saving data: " + e.getMessage());
-		}
-	}
-     //Check invoice then create new
-	private static int getAvailableItems() {
-		if(Shop.itemList.size() == 1 )
-			return Shop.itemList.size();
-		else {
-		System.out.println("Enter items ID :" );
-		int id = scan.nextInt();
-		System.out.println("Enter items name :");
-		String name = scan.next();
-		System.out.println("Enter items Quantity :");
-		double quantity = scan.nextDouble();
-		System.out.println("Enter item Price : " );
-		double price = scan.nextDouble();
-		// ArrayList<String> invoiceList = loadInvoicing(Invoice);
-
-		// Do something with the loaded items and invoices.
-		System.out.println("Data loaded successfully.");
-		//return item;
-	}
-		return getAvailableItems();
-		
-}
-
-	
-
-	
-   //Load data for Shop Setting
-	private static Item loadData() {
-		Item newItem = new Item();
-		
-		System.out.println("Enter items ID :");
-		int id = scan.nextInt();
-		System.out.println("Enter items name :" );
-		String name = scan.nextLine();
-		System.out.println("Enter items Quantity :" );
-		double quantity = scan.nextDouble();
-		System.out.println("Enter item Price : ");
-		double price = scan.nextDouble();
-		
-		
-		newItem.setitemId(id);
-		newItem.setName(name);
-		newItem.setqtyprice(price);
-		newItem.setquantity(quantity);
-		ShopeSetting.saveSettings();
-		// Do something with the loaded items and invoices.
-		System.out.println("Data loaded successfully.");
-		return newItem;
-	}
-	
-	
     //Case 4 Report Statistic
 	static Item ReportStatistic() {
 		
@@ -264,35 +228,39 @@ public class Main {
 		}
 
 		// Print results
-		System.out.println("|----------------------------------|");
-		System.out.println("|          INVOICE REPORT          |");
-		System.out.println("|----------------------------------|");
-		System.out.println("|Number of items sold :            |" + Item.numberOfItems);
-		System.out.println("|Number of invoices:               |" + Shop.invoiceList.size());
-		System.out.println("|Total sales: $                    |" + totalSales);
-		System.out.println("|----------------------------------|");
+		System.out.println("|------------------------------------------------|");
+		System.out.println("|          INVOICE REPORT                        |");
+		System.out.println("|------------------------------------------------|");
+		System.out.println("|Number of items sold :"+ Item.numberOfItems+"   |");
+		System.out.println("|Number of invoices:"+ Shop.invoiceList.size()+" |");
+		System.out.println("|Total sales: $" + totalSales+"                  |");
+		System.out.println("|------------------------------------------------|");
 		return ReportStatistic();
 		
 	}
 	
 	//Report case5
-	static Main Report() {
-		
-		
-		for (int i = 0; i < Shop.invoiceList.size(); i++) {
-			System.out.println("|---------------------------------|");
-			System.out.println("|        FULL REPORT              |");
-			System.out.println("|---------------------------------|");
-			System.out.println("|Invoice NO.:                     |" + Invoicing.invNO);
-			System.out.println("|Invoice Date :                   |"+ Invoicing.date);
-			System.out.println("|Customer Name:                   |" + Invoicing.customerName);
-			System.out.println("|Customer Phone:                  |" + Invoicing.phone);
-			System.out.println("|Number of Item                   |" + Invoicing.numberOfItems);
-			System.out.println("|Balance:                         |" + Invoicing.balance);
-			System.out.println("|---------------------------------|");
+	static void InvoiceReporter(){
+		      List<Invoicing> invoiceList;
+			System.out.println("|-------------------------------------------|");
+			System.out.println("|        FULL REPORT                        |");
+			System.out.println("|-------------------------------------------|");
+			if (Invoicing.invoiceList.isEmpty()) {
+				System.out.println("No invoices found!");
+			} else {
+				for (int i = 0; i < Invoicing.invoiceList.size(); i++) {
+					String invoice = Invoicing.invoiceList.get(i);
+					System.out.println("|----------------------------------------------|");
+					System.out.println("|Invoice NO.:" + Invoicing.invNO + "            |");
+					System.out.println("|Invoice Date:" + Invoicing.date + "           |");
+					System.out.println("|Customer Name:" + Invoicing.customerName + "  |");
+					System.out.println("|Customer Phone:" + Invoicing.phone + "        |");
+					System.out.println("|Number of Items:" + Invoicing.numberOfItems + " |");
+					System.out.printf("|Balance: $%.2f \n", Invoicing.balance + "        |");
+					System.out.println("|----------------------------------------------|");
+				}
+			}
 		}
-		return Report() ;
-	}
 	
 	
 	//case 7 Program statistic
@@ -320,14 +288,16 @@ public class Main {
 				selection6++;
 			}
 		}
-		System.out.println("----------------------------------");
-		System.out.println("|Shop Setting =                   |" + selection1);
-		System.out.println("|Manage Shop        =             |" + selection2);
-		System.out.println("|Create New Invoice =             |" + selection3);
-		System.out.println("|Report Statistic   =             |" + selection4);
-		System.out.println("|Report           =               |" + selection5);
-		System.out.println("|Search By ID     =               |" + selection6);
-		System.out.println("----------------------------------");
+		System.out.println("|--------------------------------------|");
+		System.out.println("|          Program Statistc            |");
+		System.out.println("|--------------------------------------|");
+		System.out.println("|Shop Setting ="  + selection1+"       |");
+		System.out.println("|Manage Shop  = " + selection2+"       |");
+		System.out.println("|Create New Invoice =" + selection3+"  |");
+		System.out.println("|Report Statistic   =" + selection4+"  |");
+		System.out.println("|Report         = " + selection5+"     |");
+		System.out.println("|Search By ID     =" + selection6+"    |");
+		System.out.println("|--------------------------------------|");
 		return ProgStatistic();
 	}
 }

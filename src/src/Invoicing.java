@@ -1,10 +1,13 @@
 package src;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -18,7 +21,9 @@ public class Invoicing implements Serializable {
 	private static final String Invoice = null; 
 	static Scanner scan = new Scanner(System.in);
 	
-
+	// Invoicing Array
+	  static ArrayList<String> invoiceList = new ArrayList<String>();
+	  
 	private String tel;
 	private String fax;
 	private static String email;
@@ -120,7 +125,7 @@ public class Invoicing implements Serializable {
 
 	public static void loadInvoices() {
 		try {
-			ObjectInputStream in = new ObjectInputStream(new FileInputStream("Invoice.txt"));
+			ObjectInputStream in = new ObjectInputStream(new FileInputStream("Item.txt"));
 			ShopeSetting settings = (ShopeSetting) in.readObject();
 			String shopName = settings.shopName;
 			String telNumber = settings.telNumber;
@@ -136,14 +141,39 @@ public class Invoicing implements Serializable {
 	}
 	public void saveInvoice() {
 		try {
-			FileOutputStream fileOut = new FileOutputStream("Invoice" + invNO + ".ser");
-			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(fileOut);
-			out.close();
-			fileOut.close();
-			System.out.println("Serialized data is saved in Invoice" + invNO + ".ser");
-		} catch (IOException i) {
-			i.printStackTrace();
+			File file = new File("Item.txt");
+
+			if (file.createNewFile()) {
+				System.out.println("File is Created");
+				System.out.println("File name : " + file.getName());
+
+				FileWriter File = new FileWriter("Item.txt");
+				java.io.File readObject = (java.io.File) ((ObjectInput) File).readObject();
+				
+				File.write("|-----------------------------------------------------------|");
+				File.write("|                     INVOICE DETAILS                       |");
+				File.write("|-----------------------------------------------------------|");
+				File.write("|Item ID :                  " + Item.itemId + "             |");
+				File.write("|Item name :                " + Item.item_Name + "          |");
+				File.write("|Item unitPrice :           " + Item.unitPrice + "          |");
+				File.write("|Item quantity :            " + Item.quantity + "           |");
+				File.write("|Invoice ID :               " + Invoicing.invNO + "         |");
+				File.write("|Invoice customerName :     " + Invoicing.customerName + "  |");
+				File.write("|Invoice phone :            " + Invoicing.phone + "         |");
+				File.write("|Invoice date :             " + Invoicing.date + "          |");
+				File.write("|Invoice numberOfItems :    " + Invoicing.numberOfItems + " |");
+				File.write("|Invoice totalAmount :      " + Invoicing.totalAmount + "   |");
+				File.write("|Invoice paidAmount :       " + Invoicing.paidAmount + "    |");
+				File.write("-------------------------------------------------------------");
+				file = readObject;
+				File.close();
+				File.close();
+			}
+		} 
+		
+		catch (Exception e) {
+			System.out.println("Invalied Input");
+
 		}
 	}
 
@@ -189,62 +219,63 @@ public class Invoicing implements Serializable {
 		String website = scan.next();
 		System.out.println("|---------------------------------|");
 		System.out.println("|Invoice header set to:           |");
-		System.out.println("|Tel:                             |" + telNumber);
-		System.out.println("|Fax:                             |" + faxNumber);
-		System.out.println("|Email:                           |" + email);
-		System.out.println("|Website:                         |" + website);
+		System.out.println("|Tel:|" + telNumber + "           |");
+		System.out.println("|Fax: " + faxNumber + "           |");
+		System.out.println("|Email:"+ email + "               |" );
+		System.out.println("|Website:" + website +"           |");
 		System.out.println("|---------------------------------|");
 		return newInvoice;
 		
 		
 	}
-	    static Invoicing getAvailableItems() {
-	    Invoicing.loadInvoices();
-		         // get list of available items
-	    Invoicing newInvoice = new Invoicing();
-		while (true) {
-			System.out.println("Select an item to add (enter product or -1 to finish):");
-			for (int i = 0; i < Shop.itemList.size(); i++) {
-				System.out.println(i + ". " + Shop.itemList.get(i).getName() + " - " + Shop.itemList.get(i).getunitPrice());
+	    
+	    
+	  //Check invoice then create new
+	    //static Invoicing getAvailableItems() {
+	    	public static void newInvoice() {
+	    		System.out.println("Invoice Number: " + invNO);
+	    		System.out.println("Customer Name: " + customerName);
+	    		System.out.println("Phone: " + phone);
+	    		System.out.println("Date: " + date);
+	    		System.out.println("Items: ");
+	    		for (int i = 0; i < Shop.itemList.size(); i++) {
+	    			System.out.println(Shop.itemList.get(i).getName() + " - " + Shop.itemList.get(i).getquantity() + " x " + Shop.itemList.get(i).getqtyprice());
+	    		}
+	    		System.out.println("Balance: $" + balance);
+	    	}
+	    	
+		 
+
+	    
+			static Invoicing Search() {
+				System.out.println("Enter Invoice NUMBER to search");
+				int invoNO = scan.nextInt();
+				// All data come from invoicing class
+				if (invoNO == Invoicing.invNO) {
+
+					System.out.println("|--------------------------------------------|");
+					System.out.println("|INVOICE DETAILES NO:" + Invoicing.invNO + "   |");
+					System.out.println("|--------------------------------------------|");
+					System.out.println("|Invoice NO.:" + Invoicing.invNO + "           |");
+					System.out.println("|Customer Name:" + Invoicing.customerName + "  |");
+					System.out.println("|Customer Pone:" + Invoicing.phone + "         |");
+					System.out.println("|Invoice Date:" + Invoicing.date + "           |");
+					System.out.println("|Balance:" + Invoicing.balance + "              |");
+					System.out.println("---------------------------------------------|");
+					// System.out.println("Item Name: " + Invoicing.item_Nameme);
+					// System.out.println("Item ID: " + Invoicing.itemId);
+					// System.out.println("Item Price: " + Invoicing.unitPrice);
+					// System.out.println("Item Quantity: " + Invoicing.quantity);
+					// System.out.println("Item Quantity Amount: " + Invoicing.qtyAmount);
+				} else {
+					// If not found, display an error message
+					System.out.println("Sorry, no invoice was found with that number.");
+				}
+
+				// Return the result (which may be null if no invoice was found)
+				return null;
 			}
-			int product = scan.nextInt();
-			if (product == -1) {
-				break;
-			} else if (product >= 0 && product < Shop.itemList.size()) {
-				Invoicing.addItem(Shop.itemList.get(product));
-			} else {
-				System.out.println("Invalid product.");
-			}
-		}
-		return newInvoice;
-		}
-	static Invoicing Search() {
-		
-		
-		System.out.println("Enter Invoice NUMBER to search");
-		int invoNO = scan.nextInt();
-		// All data come from invoicing class
-		if (invoNO == Invoicing.invNO) {
-			
-			System.out.println("|-----------------------------------------|");
-			System.out.println("|INVOICE DETAILES NO:"+ Invoicing.invNO+ "|");
-			System.out.println("|-----------------------------------------|");
-			System.out.println("|Invoice NO.:                             |" + Invoicing.invNO);
-			System.out.println("|Customer Name:                           |" + Invoicing.customerName);
-			System.out.println("|Customer Pone:                           |" + Invoicing.phone);
-			System.out.println("|Invoice Date:                            |" + Invoicing.date);
-			System.out.println("|Balance:                                 |" + Invoicing.balance);
-			System.out.println("------------------------------------------|");
-			// System.out.println("Item Name: " + Invoicing.item_Nameme);
-			// System.out.println("Item ID: " + Invoicing.itemId);
-			// System.out.println("Item Price: " + Invoicing.unitPrice);
-			// System.out.println("Item Quantity: " + Invoicing.quantity);
-			// System.out.println("Item Quantity Amount: " + Invoicing.qtyAmount);
-		}
-		return Search();
-		
-	}
-	
+	  	  
 	public static int size() {
 		// TODO Auto-generated method stub
 		return 0;

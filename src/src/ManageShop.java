@@ -13,22 +13,21 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 class ShopManage implements Serializable {
-	private ArrayList<Item> items;
+	private static ArrayList<Item> items;
 	//private String saveItem = "items.ser";
     static Scanner scan= new Scanner(System.in);
-	ShopManage() {
-		/**/
-	}
+	
+	
 
 	public static void save() {
 		try {
-			File file = new File("Invoice.txt");
+			File file = new File("Item.txt");
 
 			if (file.createNewFile()) {
 				System.out.println("File is Created");
 				System.out.println("File name : " + file.getName());
 
-				FileWriter File = new FileWriter("Invoice.txt");
+				FileWriter File = new FileWriter("Item.txt");
 				java.io.File readObject = (java.io.File) ((ObjectInput) File).readObject();
 				
 				File.write("|-----------------------------------------------------------|");
@@ -45,7 +44,7 @@ class ShopManage implements Serializable {
 				File.write("|Invoice numberOfItems :    " + Invoicing.numberOfItems + " |");
 				File.write("|Invoice totalAmount :      " + Invoicing.totalAmount + "   |");
 				File.write("|Invoice paidAmount :       " + Invoicing.paidAmount + "    |");
-				File.write("-------------------------------------------------------------");
+				File.write("|-----------------------------------------------------------|");
 				file = readObject;
 				File.close();
 				File.close();
@@ -58,31 +57,32 @@ class ShopManage implements Serializable {
 		}
 	}
 
-	public void addItem(String name, double price, double unitPrice) {
+	public static void addItem(String name, double price){
 	    Item newItem = new Item();
-	    items.add(newItem);
+	    //items.add(name);
+	    //items.add(price);
 	    saveItems();
 	    System.out.println("Item added successfully.");
 	}
 
-	public void deleteItem(int product) {
-		if (product < 0 || product >= items.size()) {
-			System.out.println("Invalid product.");
+	public void deleteItem(int item) {
+		if (item < 0 || item >= items.size()) {
+			System.out.println("Invalid Item.");
 			return;
 		}
 
-		items.remove(product);
+		items.remove(items);
 		saveItems();
 		System.out.println("Item deleted successfully.");
 	}
 
-	public void changeItemPrice(double product, double newPrice) {
-		if (product < 0 || product >= Shop.itemList.size()) {
-			System.out.println("Invalid product.");
+	public void changeItemPrice(double item, double newPrice) {
+		if (item < 0 || item >= Shop.itemList.size()) {
+			System.out.println("Invalid Item.");
 			return;
 		}
 
-		items.get((int) product).setunitPrice(newPrice);
+		items.get((int) item).setunitPrice(newPrice);
 		saveItems();
 		System.out.println("Item price changed successfully.");
 	}
@@ -95,23 +95,33 @@ class ShopManage implements Serializable {
 		}
 	}
 
-	public void saveItems() {
+	public static void saveItems() {
 		try {
-			FileOutputStream fileOut = new FileOutputStream("Invoice.txt");
+            FileWriter writer = new FileWriter("items.txt", true);
+            writer.write(items + "\n");
+            writer.close();
+            System.out.println("Item saved successfully!");
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving the item: " + e.getMessage());
+        }
+    }
+		/*try {
+			FileOutputStream fileOut = new FileOutputStream("Item.txt");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(items);
+			out.defaultWriteObject();
 			out.close();
 			fileOut.close();
 		} 
 		
 		catch (IOException i) {
 			i.printStackTrace();
-		}
-	}
+		}*/
+	
 
 
-	public void addInvoice(Object invoic) {
+	public static void addInvoice(Object invoic) {
 		Invoicing.add(invoic);
 
 	}
 }
+	
