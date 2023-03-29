@@ -90,32 +90,32 @@ class Item implements Serializable {
 		System.out.println("Enter new price:");
 		double newPrice = scan.nextDouble();
 		manage.changeItemPrice(item, newPrice);
+		while (repeat) {
+		    System.out.print("Do you want to add an item to change the price? (y/n): ");
+		    String select = scan.next().trim();
+		    if (select.equalsIgnoreCase("n")) {
+		        repeat = false;
+		        break;
+		    } else if (select.equalsIgnoreCase("y")) {
+		        break;
+		    } else if (select.matches("\\d+")) {
+		        System.out.println("Please enter a letter (y/n)");
+		    } else {
+		        System.out.println("Invalid input. Please enter 'y' or 'n'.");
+		    }
 		
-		
-			while(repeat) {
-				System.out.print("Do you want to delete other item ? (y/n):    ");
-				String select = scan.next();
-				if (select.equals("N") || select.equals("n")) {
-					repeat = false;
-					break;
-				} else if (select.equals("y") || select.equals("Y")) {
-					break;
-				} else {
-					System.out.println("Invalid letter  ");
-				}
 		}
-		
-		ShopManage.save();
+		//ShopManage.save();
 		return Change();
 		
 	}
 	
 	
-	static Item deleteItem() {
+	static void deleteItem() {
 	boolean run=true;
+	while(run){
 	
-	
-		System.out.println("Enter id of item to delete :" );
+		System.out.println("Enter id of item to delete :" + Item.itemId);
 		int item = scan.nextInt();
 		if(Item.itemId == item) {
 			
@@ -126,23 +126,27 @@ class Item implements Serializable {
 			System.out.println("Not Found");
 		}
 
-		while(run) {
-			System.out.print("Do you want to delete other item ? (y/n):    ");
-			String select = scan.next();
-			if (select.equals("N") || select.equals("n")) {
-				run = false;
-				break;
-			} else if (select.equals("y") || select.equals("Y")) {
-				break;
-			} else {
-				System.out.println("Invalid letter  ");
-			}
+		while (true) {
+		    System.out.print("Do you want to delete other item ? (y/n): ");
+		    String select = scan.next().trim();
+		    if (select.equalsIgnoreCase("n")) {
+		        run = false;
+		        break;
+		    } else if (select.equalsIgnoreCase("y")) {
+		        break;
+		    } else if (select.matches("\\d+")) {
+		        System.out.println("Please enter a letter (y/n)");
+		    } else {
+		        System.out.println("Invalid input. Please enter 'y' or 'n'.");
+		    }
+		
 		}
-	
+		}
 		//Item.deleteItem();
 		ShopManage.save();
-		return deleteItem();
+		return;
 		
 	   }
 	}
+
 

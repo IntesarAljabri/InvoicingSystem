@@ -18,3 +18,7 @@ null
 null
 1 - milk - $22.0 _ 2.0
 null
+1 - milk - $22.0 _ 2.0
+null
+1 - suger - $20.0 _ 2.0
+null

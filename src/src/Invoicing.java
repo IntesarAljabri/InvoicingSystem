@@ -108,10 +108,7 @@ public class Invoicing implements Serializable {
 		Invoicing.balance = balance;
 	}
 
-	public static void addItem(Item item) {
-		// TODO Auto-generated method stub
-
-	}
+	
 
 	public static double calculateTotalPrice() {
 		int quantity=0;
@@ -123,7 +120,7 @@ public class Invoicing implements Serializable {
 
 	}
 
-	public static void loadInvoices() {
+	/*public static void loadInvoices() {
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream("Item.txt"));
 			ShopeSetting settings = (ShopeSetting) in.readObject();
@@ -138,7 +135,8 @@ public class Invoicing implements Serializable {
 			System.out.println("Error loading data: " + e.getMessage());
 		}
 
-	}
+	}*/
+	
 	public void saveInvoice() {
 		try {
 			File file = new File("Item.txt");
@@ -292,12 +290,8 @@ public class Invoicing implements Serializable {
 					System.out.println("|Invoice Date:" + Invoicing.date + "           |");
 					System.out.println("|Balance:" + Invoicing.balance + "             |");
 					System.out.println("-----------------------------------------------|");
-					// System.out.println("Item Name: " + Invoicing.item_Nameme);
-					// System.out.println("Item ID: " + Invoicing.itemId);
-					// System.out.println("Item Price: " + Invoicing.unitPrice);
-					// System.out.println("Item Quantity: " + Invoicing.quantity);
-					// System.out.println("Item Quantity Amount: " + Invoicing.qtyAmount);
-				} else {
+				}
+				else {
 					// If not found, display an error message
 					System.out.println("Sorry, no invoice was found with that number.");
 				}
