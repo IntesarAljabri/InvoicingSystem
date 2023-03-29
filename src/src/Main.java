@@ -11,7 +11,7 @@ public class Main {
 		   static ArrayList<Item> itemList= new ArrayList<Item>();
 				
 		 // Invoicing Array
-		  static ArrayList<Invoicing> invoiceList = new ArrayList<Invoicing>();
+		 // static ArrayList<Invoicing> invoiceList = new ArrayList<Invoicing>();
 				
 			
 
